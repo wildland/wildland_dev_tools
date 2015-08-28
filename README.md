@@ -1,4 +1,4 @@
-# WildlandDevTools
+# Wildland DevTools
 This is a gem that contains all of our dev rake tasks.
 
 ## Installation
