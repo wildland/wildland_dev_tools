@@ -1,5 +1,23 @@
 namespace :wildland do
-  namespace :pr_checker do
+  desc 'Runs all the pre pull request tasks.'
+  task :pre_pull_request do
+    Rake::Task['wildland:pre_pull_request:all'].invoke
+  end
+  desc 'Alias to pre pull request.'
+  task :pre_pr do
+    Rake::Task['wildland:pre_pull_request'].invoke
+  end
+  namespace :pre_pull_request do
+    task all: [
+      :notes,
+      :fixme_notes,
+      :ruby_debugger,
+      :js_debugger,
+      :rubocop_recent
+    ] do
+      puts 'PR Check completed.'
+    end
+
     desc 'Run brakeman & rubocop with html formats and save them to /reports'
     task :html do
       system 'bundle exec rubocop -RDf progress -f html -o reports/rubocop.html'
@@ -49,6 +67,7 @@ namespace :wildland do
 
     desc 'Run rubocop against all created/changed ruby files'
     task :rubocop_recent, [:autocorrect] do |t, args|
+      puts 'Running rubocop...'
       require 'rubocop'
 
       module RuboCop
