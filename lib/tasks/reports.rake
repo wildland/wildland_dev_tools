@@ -58,8 +58,8 @@ namespace :wildland do
 
             rubocop_target_finder = RuboCop::TargetFinder.new(RuboCop::ConfigStore.new)
             rubocop_config_store = RuboCop::ConfigStore.new
-            rubocop_base_config = rubocop_config_store.for(File.expand_path('../../', __dir__))
-
+            rubocop_base_config = rubocop_config_store.for(File.expand_path( __dir__))
+            binding.pry
             files_to_check = changed_git_files.select do |file|
               rubocop_target_finder.to_inspect?(file, [], rubocop_base_config)
             end
