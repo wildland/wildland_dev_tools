@@ -13,10 +13,8 @@ namespace :wildland do
   end
 
   namespace :pre_deploy do
-    task all: [
-      :ember
-    ] do
-      puts 'Deploy Check completed.'
+    task :all do
+      Rake::Task['wildland:pre_deploy:ember:build'].invoke
     end
 
     namespace :ember do
