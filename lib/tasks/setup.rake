@@ -16,6 +16,7 @@ namespace :wildland do
       system('npm install')
       system('bower install')
     end
+    system('rake db:drop')
     system('rake db:create')
     system('rake db:migrate')
     system('rake db:setup')
