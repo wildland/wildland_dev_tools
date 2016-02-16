@@ -12,10 +12,14 @@ namespace :wildland do
       puts 'up to date.'
     end
 
-    Dir.chdir('app-ember') do
+    if ember_cli_rails_installed?
+      puts 'ember-cli-rails installed'
       system('npm install')
-      system('bower install')
+    else
+      puts 'install ember dependencies'
+      old_ember_setup
     end
+
     system('rake db:drop')
     system('rake db:create')
     system('rake db:migrate')
@@ -54,4 +58,15 @@ end
 
 def update_ruby_with_rbenv(version)
   puts 'rbenv updater not written.'
+end
+
+def ember_cli_rails_installed?
+  File.exists?('bin/heroku_install') && File.exists?('package.json')
+end
+
+def old_ember_setup
+  Dir.chdir('app-ember') do
+    system('npm install')
+    system('bower install')
+  end
 end
