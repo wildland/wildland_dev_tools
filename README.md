@@ -26,5 +26,13 @@ You will get a new batch of new rake tasks under the wildland namespace. For a f
 - `rake wildland:pre_pr` Convenience alias to `rake wildland:pre_pull_request`.
 - `rake wildland:pre_pull_request` This will runn all of the pre pull request tasks to get the project ready for a pull request.
 
+*Note. This may fail if you did not install heroku-toolbelt through brew.*
+*Note. These tasks require that the production and staging remotes include the word 'staging' and 'production' in them respectively.*
+
+- `rake wildland:heroku:promote_to_production` This will promote `staging` to `production`.
+- `rake wildland:heroku:promote_to_production[verbose]` This will promote `staging` to `production` with verbose details.
+- `rake wildland:heroku:maintenance_mode_on` This turns on maintenance mode for `staging` and `production`.
+- `rake wildland:heroku:maintenance_mode_off` This turns off maintenance mode for `staging` and `production`.
+
 ## Code Of Conduct
 Wildland Open Source [Code Of Conduct](https://github.com/wildland/code-of-conduct)
