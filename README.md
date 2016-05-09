@@ -5,13 +5,13 @@ This is a gem that contains all of our dev rake tasks.
 
 Add the following to your `Gemfile`:
 
-`gem 'wildland_dev_tools', '~>0.1.1', git: 'https://github.com/wildland/wildland_dev_tools.git'`
+`gem 'wildland_dev_tools', '~>0.3.0', git: 'https://github.com/wildland/wildland_dev_tools.git'`
 
 Typically for wildland projects you will want to put this inside the dev/test block:
 ```
 group :development, :test do
   ...
-  gem 'wildland_dev_tools', '~>0.1.1',  git: 'https://github.com/wildland/wildland_dev_tools.git'
+  gem 'wildland_dev_tools', '~>0.3.0',  git: 'https://github.com/wildland/wildland_dev_tools.git'
   ...
 end
 ```
@@ -19,6 +19,7 @@ end
 ## Usage
 You will get a new batch of new rake tasks under the wildland namespace. For a full list run `rake -T`.
 
+### Local Development Tools
 *Note that you will need to run `bundle install` before being able to use these.*
 
 - `rake wildland:setup` This will run all of the setup tasks to get your local enviroment ready to go.
@@ -26,7 +27,8 @@ You will get a new batch of new rake tasks under the wildland namespace. For a f
 - `rake wildland:pre_pr` Convenience alias to `rake wildland:pre_pull_request`.
 - `rake wildland:pre_pull_request` This will runn all of the pre pull request tasks to get the project ready for a pull request.
 
-*Note. This may fail if you did not install heroku-toolbelt through brew.*
+### Heroku Tools
+*Note. These may fail if you did not install heroku-toolbelt through brew.*
 *Note. These tasks require that the production and staging remotes include the word 'staging' and 'production' in them respectively.*
 
 - `rake wildland:heroku:promote_to_production` This will promote `staging` to `production`.
