@@ -52,6 +52,14 @@ module WildlandDevTools
           system('bower install')
         end
       end
+
+      def clear_ember_cache
+        Dir.chdir('app-ember') do
+          system('npm cache clean && bower cache clean')
+          system('rm -rf node_modules && rm -rf bower_components')
+          system('npm install && bower install')
+        end
+      end
     end
   end
 end

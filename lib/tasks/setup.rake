@@ -1,10 +1,12 @@
 require 'wildland_dev_tools/updater'
 
 namespace :wildland do
-  desc 'Updates libs and database'
-  task :setup do
-    # Checkout ruby and node versions
-    print 'Checking ruby version... '
+  desc 'Updates local dependencies and database.'
+  task :setup => [:update_ruby, :update_node, :update_ember_dependencies, :db] do
+    puts 'Ready to go!'
+  end
+
+  task :update_ruby do
     needed_ruby_version = File.read('.ruby-version')
     unless WildlandDevTools::Updater.ruby_version_up_to_date?(needed_ruby_version)
       puts "out of date. Updating."
@@ -12,7 +14,13 @@ namespace :wildland do
     else
       puts 'up to date.'
     end
+  end
 
+  task :update_node do
+    puts 'Node updater needs written'
+  end
+
+  task :update_ember_dependencies do
     if WildlandDevTools::Updater.ember_cli_rails_installed?
       puts 'ember-cli-rails installed'
       system('npm install')
@@ -20,6 +28,11 @@ namespace :wildland do
       puts 'install ember dependencies'
       WildlandDevTools::Updater.old_ember_setup
     end
+  end
+
+  desc 'Clears local cache.'
+  task :cache_clear do
+    WildlandDevTools::Updater.clear_ember_cache
   end
 
   namespace :db do
@@ -42,4 +55,6 @@ namespace :wildland do
 end
 
 desc 'Gets development environment setup.'
-task wildland: 'wildland:setup'
+task :wildland do
+  Rake::Task['wildland:setup'].invoke
+end
