@@ -20,12 +20,24 @@ namespace :wildland do
       puts 'install ember dependencies'
       WildlandDevTools::Updater.old_ember_setup
     end
+  end
 
-    system('rake db:drop')
-    system('rake db:create')
-    system('rake db:migrate')
-    system('rake db:setup')
-    system('rake demo:seed')
+  namespace :db do
+    desc 'Resets the database.'
+    task :reset do
+      WildlandDevTools::Updater.reset_database
+    end
+
+    desc 'Reseeds the database.'
+    task :reseed do
+      WildlandDevTools::Updater.reseed_database
+    end
+  end
+
+  desc 'Resets and reseeds the database.'
+  task :db do
+    Rake::Task['wildland:db:reset'].execute
+    Rake::Task['wildland:db:reseed'].execute
   end
 end
 

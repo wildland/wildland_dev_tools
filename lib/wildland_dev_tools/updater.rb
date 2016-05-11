@@ -1,6 +1,18 @@
 module WildlandDevTools
   module Updater
     class << self
+      def reset_database
+        system('rake db:drop')
+        system('rake db:create')
+        system('rake db:migrate')
+        system('annotate') if system("which annotate > /dev/null 2>&1")
+      end
+
+      def reseed_database
+        system('rake db:seed')
+        system('rake demo:seed')
+      end
+
       def ruby_version_up_to_date?(needed_ruby_version)
         ruby_version = `ruby -v`
         ruby_version.include?(needed_ruby_version)
