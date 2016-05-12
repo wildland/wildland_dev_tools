@@ -5,13 +5,13 @@ This is a gem that contains all of our dev rake tasks.
 
 Add the following to your `Gemfile`:
 
-`gem 'wildland_dev_tools', '~>0.3.0', git: 'https://github.com/wildland/wildland_dev_tools.git'`
+`gem 'wildland_dev_tools', '~>0.4.0', github: 'wildland/wildland_dev_tools'`
 
 Typically for wildland projects you will want to put this inside the dev/test block:
 ```
 group :development, :test do
   ...
-  gem 'wildland_dev_tools', '~>0.3.0',  git: 'https://github.com/wildland/wildland_dev_tools.git'
+  gem 'wildland_dev_tools', '~>0.4.0', github: 'wildland/wildland_dev_tools'`
   ...
 end
 ```
@@ -25,7 +25,6 @@ You will get a new batch of new rake tasks under the wildland namespace. For a f
 - `rake wildland:setup` This will run all of the setup tasks to get your local enviroment ready to go.
 - `rake wildland:db` This will resetup and seed the local database.
 - `rake wildland:cache_clear` This will clear the local app-ember package cache.
-
 - `rake wildland:pre_deploy` This will run all of the pre-deploy tasks to get the project ready to deploy.
 - `rake wildland:pre_pr` Convenience alias to `rake wildland:pre_pull_request`.
 - `rake wildland:pre_pull_request` This will runn all of the pre pull request tasks to get the project ready for a pull request.
