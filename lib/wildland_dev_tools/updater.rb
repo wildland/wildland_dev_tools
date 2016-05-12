@@ -1,6 +1,18 @@
 module WildlandDevTools
   module Updater
     class << self
+      def reset_database
+        system('rake db:drop')
+        system('rake db:create')
+        system('rake db:migrate')
+        system('annotate') if system("which annotate > /dev/null 2>&1")
+      end
+
+      def reseed_database
+        system('rake db:seed')
+        system('rake demo:seed')
+      end
+
       def ruby_version_up_to_date?(needed_ruby_version)
         ruby_version = `ruby -v`
         ruby_version.include?(needed_ruby_version)
@@ -38,6 +50,14 @@ module WildlandDevTools
         Dir.chdir('app-ember') do
           system('npm install')
           system('bower install')
+        end
+      end
+
+      def clear_ember_cache
+        Dir.chdir('app-ember') do
+          system('npm cache clean && bower cache clean')
+          system('rm -rf node_modules && rm -rf bower_components')
+          system('npm install && bower install')
         end
       end
     end
