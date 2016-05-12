@@ -2,17 +2,17 @@ require 'wildland_dev_tools/updater'
 
 namespace :wildland do
   desc 'Updates local dependencies and database.'
-  task :setup => [:update_ruby, :update_node, :update_ember_dependencies, :db] do
+  task setup: [:update_ruby, :update_node, :update_ember_dependencies, :db] do
     puts 'Ready to go!'
   end
 
   task :update_ruby do
     needed_ruby_version = File.read('.ruby-version')
-    unless WildlandDevTools::Updater.ruby_version_up_to_date?(needed_ruby_version)
-      puts "out of date. Updating."
-      WildlandDevTools::Updater.update_ruby(needed_ruby_version)
-    else
+    if WildlandDevTools::Updater.ruby_version_up_to_date?(needed_ruby_version)
       puts 'up to date.'
+    else
+      puts 'out of date. Updating.'
+      WildlandDevTools::Updater.update_ruby(needed_ruby_version)
     end
   end
 

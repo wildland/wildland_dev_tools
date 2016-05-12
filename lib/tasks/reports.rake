@@ -37,7 +37,7 @@ namespace :wildland do
 
     desc 'Print only FIXME notes'
     task :fixme_notes do
-      puts "\nFIXME Notes (These should all be fixed before merging to master):"
+      puts "\nFIXME Notes:"
       system 'bin/rake notes:fixme'
       system "grep -rnE 'FIXME:|FIXME'"\
              ' spec'
@@ -47,7 +47,7 @@ namespace :wildland do
 
     desc 'Find ruby debugger statements.'
     task :ruby_debugger do
-      puts "\nRuby debuggers (These should all be removed before merging to master):"
+      puts "\nRuby debuggers:"
       %w(binding.pry puts).each do |debugger|
         %w(app/).each do |dir|
           system "grep -rnE '#{debugger}' #{dir}"
@@ -57,7 +57,7 @@ namespace :wildland do
 
     desc 'Find js debugger statements.'
     task :js_debugger do
-      puts "\nJS debuggers (These should all be removed before merging to master):"
+      puts "\nJS debuggers:"
       %w(debugger).each do |debugger|
         %w(app-ember/app).each do |dir|
           system "grep -rnE '#{debugger}' #{dir}"
@@ -66,24 +66,29 @@ namespace :wildland do
     end
 
     desc 'Run rubocop against all created/changed ruby files'
-    task :rubocop_recent, [:autocorrect] do |t, args|
+    task :rubocop_recent, [:autocorrect] do |_t, args|
       puts 'Running rubocop...'
       require 'rubocop'
 
       module RuboCop
+        # :nodoc:
         class TargetFinder
-          def find(args)
+          def find(_args)
             changed_git_files = `git diff --name-only --cached`.split(/\n/)
 
-            rubocop_target_finder = RuboCop::TargetFinder.new(RuboCop::ConfigStore.new)
+            rubocop_target_finder = RuboCop::TargetFinder.new(
+              RuboCop::ConfigStore.new
+            )
             rubocop_config_store = RuboCop::ConfigStore.new
-            rubocop_base_config = rubocop_config_store.for(File.expand_path( __dir__))
+            rubocop_base_config = rubocop_config_store.for(
+              File.expand_path(__dir__)
+            )
 
             files_to_check = changed_git_files.select do |file|
               rubocop_target_finder.to_inspect?(file, [], rubocop_base_config)
             end
 
-            return files_to_check
+            files_to_check
           end
         end
       end
@@ -96,5 +101,3 @@ namespace :wildland do
     end
   end
 end
-
-

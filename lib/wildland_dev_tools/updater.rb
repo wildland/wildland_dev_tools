@@ -1,11 +1,12 @@
 module WildlandDevTools
+  # :nodoc:
   module Updater
     class << self
       def reset_database
         system('rake db:drop')
         system('rake db:create')
         system('rake db:migrate')
-        system('annotate') if system("which annotate > /dev/null 2>&1")
+        system('annotate') if system('which annotate > /dev/null 2>&1')
       end
 
       def reseed_database
@@ -20,12 +21,12 @@ module WildlandDevTools
 
       def update_ruby(version)
         case
-        when system("which rvm > /dev/null 2>&1")
+        when system('which rvm > /dev/null 2>&1')
           update_ruby_with_rvm(version)
-        when system("which rbenv > /dev/null 2>&1")
+        when system('which rbenv > /dev/null 2>&1')
           update_ruby_with_rbenv(version)
         else
-          puts "No ruby manager installed. Please manually update to Ruby #{version}"
+          puts "Please manually update to Ruby #{version}"
         end
       end
 
@@ -38,12 +39,12 @@ module WildlandDevTools
         end
       end
 
-      def update_ruby_with_rbenv(version)
+      def update_ruby_with_rbenv(_version)
         puts 'rbenv updater not written.'
       end
 
       def ember_cli_rails_installed?
-        File.exists?('bin/heroku_install') && File.exists?('package.json')
+        File.exist?('bin/heroku_install') && File.exist?('package.json')
       end
 
       def old_ember_setup

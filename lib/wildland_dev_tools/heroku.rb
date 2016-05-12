@@ -1,5 +1,6 @@
 require 'git'
 module WildlandDevTools
+  # :nodoc:
   module Heroku
     class << self
       def rollback_deploy(verbose = false)
@@ -28,7 +29,7 @@ module WildlandDevTools
       end
 
       def promote_staging_to_production(verbose = false)
-        puts "Promoting staging to production" if verbose
+        puts 'Promoting staging to production' if verbose
         system('heroku pipelines:promote -r staging')
       end
 
@@ -62,7 +63,7 @@ module WildlandDevTools
         remote = 'production'
         if verbose
           puts "Manually restore database for #{remote}"
-          puts 'Once that is completed run \"rake wildland:heroku:maintenance_mode_off\"'
+          puts 'Then run \"rake wildland:heroku:maintenance_mode_off\"'
         end
       end
     end

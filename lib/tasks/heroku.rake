@@ -3,7 +3,7 @@ require 'wildland_dev_tools/heroku'
 namespace :wildland do
   namespace :heroku do
     desc 'Promotes staging to production.'
-    task :promote_to_production, [:verbose] => [:check_remotes, :check_heroku]  do |t, args|
+    task :promote_to_production, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       begin
         Rake::Task['wildland:heroku:maintenance_mode_on'].execute
         WildlandDevTools::Heroku.backup_production_database(args[:verbose])
@@ -11,6 +11,7 @@ namespace :wildland do
         WildlandDevTools::Heroku.migrate_production_database(args[:verbose])
         Rake::Task['wildland:heroku:maintenance_mode_off'].execute
       rescue RuntimeError => e
+        puts e
         WildlandDevTools::Heroku.rollback_deploy(true)
         raise
       end
@@ -28,16 +29,22 @@ namespace :wildland do
 
     task :check_heroku do
       unless WildlandDevTools::Heroku.heroku_toolbelt_available?
-        Kernal::abort('Missing heroku toolbelt. Install using \'brew install heroku-toolbelt\'.')
+        Kernal.abort(
+          'Missing heroku toolbelt. Run \'brew install heroku-toolbelt\'.'
+        )
       end
     end
 
     task :check_remotes do
       unless WildlandDevTools::Heroku.staging_remote_available?
-        Kernal::abort('Missing staging git remote. Add it using \'heroku git:remote -a <app-name> -r staging\'')
+        Kernal.abort(
+          'Missing staging git remote. Run \'heroku git:remote -a <app-name> -r staging\'' # rubocop:disable Metrics/LineLength
+        )
       end
       unless WildlandDevTools::Heroku.production_remote_available?
-        Kernal::abort('Missing production git remote. Add it using \'heroku git:remote -a <app-name> -r production\'')
+        Kernal.abort(
+          'Missing production git remote. Run \'heroku git:remote -a <app-name> -r production\'' # rubocop:disable Metrics/LineLength
+        )
       end
     end
   end
