@@ -20,7 +20,7 @@ namespace :wildland do
     desc 'Deploy master to staging.'
     task :deploy_to_staging, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       begin
-        Rake::Task['wildland:heroku:maintenance_mode_on'].execute
+        WildlandDevTools::Heroku.turn_on_staging_maintenance_mode(args[:verbose])
         WildlandDevTools::Heroku.deploy_master_to_staging(args[:verbose])
         WildlandDevTools::Heroku.copy_production_data_to_staging(args[:verbose])
         WildlandDevTools::Heroku.migrate_staging_database(args[:verbose])
@@ -31,7 +31,7 @@ namespace :wildland do
         WildlandDevTools::Heroku.rollback_staging_deploy(true)
         raise
       ensure
-        Rake::Task['wildland:heroku:maintenance_mode_off'].execute
+        WildlandDevTools::Heroku.turn_off_staging_maintenance_mode(args[:verbose])
       end
     end
 

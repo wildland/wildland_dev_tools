@@ -10,6 +10,18 @@ module WildlandDevTools
         rollback_production_database(verbose)
       end
 
+      def turn_on_staging_maintenance_mode(verbose = false)
+        remote = 'staging'
+        puts "Turning on maintenance mode for #{remote}" if verbose
+        system("heroku maintenance:on -r #{remote}")
+      end
+
+      def turn_off_staging_maintenance_mode(verbose = false)
+        remote = 'staging'
+        puts "Turning off maintenance mode for #{remote}" if verbose
+        system("heroku maintenance:off -r #{remote}")
+      end
+
       def turn_on_heroku_maintenance_mode(verbose = false)
         %w(staging production).each do |remote|
           puts "Turning on maintenance mode for #{remote}" if verbose
