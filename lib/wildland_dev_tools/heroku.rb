@@ -126,6 +126,7 @@ module WildlandDevTools
       end
 
       def get_app_name(remote, verbose = false)
+        ensure_valid_remote(remote)
         response = `heroku apps:info -r #{remote}`
         response.split(/\r?\n/).first[4..-1] # This is brittle
       end
