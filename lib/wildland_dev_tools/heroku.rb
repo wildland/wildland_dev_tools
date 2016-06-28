@@ -50,6 +50,16 @@ module WildlandDevTools
         end
       end
 
+      def import_production_database(verbose = false)
+        puts 'Determining heroku app names.' if verbose
+        production_app_name = get_app_name('production', verbose)
+        scratch_file_name = 'latest.dump'
+        database_name = Rails.configuration.database_configuration['development']['database']
+        download_database(production_app_name, scratch_file_name, verbose)
+        import_database(database_name, scratch_file_name, verbose)
+        File.delete(scratch_file_name)
+      end
+
       def copy_production_data_to_staging(verbose = false)
         puts 'Determining heroku app names.' if verbose
         staging_app_name = get_app_name('staging', verbose)
@@ -100,6 +110,20 @@ module WildlandDevTools
       end
 
       protected
+
+      def download_database(app_name, filename, verbose = false)
+        puts "Downloading #{app_name} database to tmp file #{filename}" if verbose
+        system(
+          "curl -o #{filename} `heroku pg:backups public-url --app #{app_name}`"
+        )
+      end
+
+      def import_database(database_name, filename, verbose = false)
+        puts "Importing #{filename} to #{database_name}" if verbose
+        system(
+          "pg_restore --clean --create --no-owner --no-acl --dbname=#{database_name} #{filename}"
+        )
+      end
 
       def rollback_codebase(remote, verbose = false)
         ensure_valid_remote(remote)

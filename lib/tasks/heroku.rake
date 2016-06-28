@@ -2,6 +2,17 @@ require 'wildland_dev_tools/heroku'
 
 namespace :wildland do
   namespace :heroku do
+    desc 'Imports the latest production database backup to local database.'
+    task :import_latest_production_database_backup, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
+      WildlandDevTools::Heroku.import_production_database(args[:verbose])
+      Rake::Task['db:migrate'].invoke
+    end
+
+    desc 'Backups production database'
+    task :backup_production_database, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
+      WildlandDevTools::Heroku.backup_production_database(args[:verbose])
+    end
+
     desc 'Promotes staging to production.'
     task :promote_to_production, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       begin
