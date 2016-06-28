@@ -5,13 +5,13 @@ This is a gem that contains all of our dev rake tasks.
 
 Add the following to your `Gemfile`:
 
-`gem 'wildland_dev_tools', '~>0.5.0', github: 'wildland/wildland_dev_tools'`
+`gem 'wildland_dev_tools', '~>0.6.0', github: 'wildland/wildland_dev_tools'`
 
 Typically for wildland projects you will want to put this inside the dev/test block:
 ```
 group :development, :test do
   ...
-  gem 'wildland_dev_tools', '~>0.5.0', github: 'wildland/wildland_dev_tools'`
+  gem 'wildland_dev_tools', '~>0.6.0', github: 'wildland/wildland_dev_tools'`
   ...
 end
 ```
@@ -39,6 +39,9 @@ You will get a new batch of new rake tasks under the wildland namespace. For a f
 - `rake wildland:heroku:promote_to_production[verbose]` This will promote `staging` to `production` with verbose details.
 - `rake wildland:heroku:maintenance_mode_on` This turns on maintenance mode for `staging` and `production`.
 - `rake wildland:heroku:maintenance_mode_off` This turns off maintenance mode for `staging` and `production`.
+- `rake wildland:heroku:backup_production_database[verbose]` This will create a backup of the `production` database.
+- `rake wildland:heroku:import_latest_production_database_backup[verbose]` This will import the latest `production` database backup to your local database.
+
 
 ## Code Of Conduct
 Wildland Open Source [Code Of Conduct](https://github.com/wildland/code-of-conduct)
