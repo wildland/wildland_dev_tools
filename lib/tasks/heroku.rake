@@ -58,7 +58,7 @@ namespace :wildland do
 
     task :check_heroku do
       unless WildlandDevTools::Heroku.heroku_toolbelt_available?
-        Kernal.abort(
+        Kernel.abort(
           'Missing heroku toolbelt. Run \'brew install heroku-toolbelt\'.'
         )
       end
@@ -66,12 +66,12 @@ namespace :wildland do
 
     task :check_remotes do
       unless WildlandDevTools::Heroku.staging_remote_available?
-        Kernal.abort(
+        Kernel.abort(
           'Missing staging git remote. Run \'heroku git:remote -a <app-name> -r staging\'' # rubocop:disable Metrics/LineLength
         )
       end
       unless WildlandDevTools::Heroku.production_remote_available?
-        Kernal.abort(
+        Kernel.abort(
           'Missing production git remote. Run \'heroku git:remote -a <app-name> -r production\'' # rubocop:disable Metrics/LineLength
         )
       end
