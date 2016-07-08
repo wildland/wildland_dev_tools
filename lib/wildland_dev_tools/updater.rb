@@ -39,8 +39,8 @@ module WildlandDevTools
         end
       end
 
-      def update_ruby_with_rbenv(_version)
-        puts 'rbenv updater not written.'
+      def update_ruby_with_rbenv(version)
+        system("rbenv install #{version}")
       end
 
       def ember_cli_rails_installed?
