@@ -2,7 +2,7 @@ require 'wildland_dev_tools/updater'
 
 namespace :wildland do
   desc 'Updates local dependencies and database.'
-  task setup: [:update_ruby, :update_node, :update_ember_dependencies, :db] do
+  task setup: [:update_ruby, :update_node, :update_ember_dependencies, :database_online, :db] do
     puts 'Ready to go!'
   end
 
@@ -33,6 +33,12 @@ namespace :wildland do
   desc 'Clears local cache.'
   task :cache_clear do
     WildlandDevTools::Updater.clear_ember_cache
+  end
+
+  task :database_online do
+    unless `ps aux | grep postgres[l]` != ''
+      `open -a postgres`
+    end
   end
 
   namespace :db do
