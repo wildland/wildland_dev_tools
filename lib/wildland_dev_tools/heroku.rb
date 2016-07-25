@@ -40,7 +40,7 @@ module WildlandDevTools
         case status_of_master_branch
         when 'Up-to-date'
           puts 'Deploying to staging.' if verbose
-          system('git push staging master')
+          system('OVERCOMMIT_DISABLE=1 git push staging master')
         when 'Need to pull'
           raise GitSyncException, 'Need to pull master from origin.'
         when 'Need to push'
@@ -146,9 +146,9 @@ module WildlandDevTools
       end
 
       def status_of_master_branch
-        local = `git rev-parse @`
-        remote = `git rev-parse @{u}`
-        base = `git merge-base @ @{u}`
+        local = `OVERCOMMIT_DISABLE=1 git rev-parse @`
+        remote = `OVERCOMMIT_DISABLE=1 git rev-parse @{u}`
+        base = `OVERCOMMIT_DISABLE=1 git merge-base @ @{u}`
         case
         when local == remote
           'Up-to-date'
