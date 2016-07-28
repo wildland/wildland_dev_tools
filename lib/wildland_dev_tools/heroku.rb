@@ -121,7 +121,7 @@ module WildlandDevTools
       def import_database(database_name, filename, verbose = false)
         puts "Importing #{filename} to #{database_name}" if verbose
         system(
-          "pg_restore --clean --create --no-owner --no-acl --dbname=#{database_name} #{filename}"
+          "pg_restore --clean --no-owner --no-acl --dbname=#{database_name} #{filename}"
         )
       end
 
