@@ -16,7 +16,7 @@ module WildlandDevTools
 
       def ruby_version_up_to_date?(needed_ruby_version)
         ruby_version = `ruby -v`
-        ruby_version.include?(needed_ruby_version)
+        ruby_version.include?(needed_ruby_version.strip)
       end
 
       def update_ruby(version)
