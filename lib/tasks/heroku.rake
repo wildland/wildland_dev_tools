@@ -29,10 +29,28 @@ namespace :wildland do
     end
 
     desc 'Deploy master to staging.'
-    task :deploy_to_staging, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
+    task :deploy_to_staging, [:verbose, :force] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       begin
         WildlandDevTools::Heroku.turn_on_staging_maintenance_mode(args[:verbose])
-        WildlandDevTools::Heroku.deploy_master_to_staging(args[:verbose])
+        WildlandDevTools::Heroku.deploy_master_to_staging(args[:verbose], args[:force])
+        WildlandDevTools::Heroku.copy_production_data_to_staging(args[:verbose])
+        WildlandDevTools::Heroku.migrate_staging_database(args[:verbose])
+      rescue WildlandDevTools::GitSyncException => e
+        puts e
+      rescue RuntimeError => e
+        puts e
+        WildlandDevTools::Heroku.rollback_staging_deploy(true)
+        raise
+      ensure
+        WildlandDevTools::Heroku.turn_off_staging_maintenance_mode(args[:verbose])
+      end
+    end
+
+    desc 'Deploy current branch to staging as master.'
+    task :deploy_current_branch_to_staging, [:verbose, :force] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
+      begin
+        WildlandDevTools::Heroku.turn_on_staging_maintenance_mode(args[:verbose])
+        WildlandDevTools::Heroku.deploy_current_branch_to_staging(args[:verbose], args[:force])
         WildlandDevTools::Heroku.copy_production_data_to_staging(args[:verbose])
         WildlandDevTools::Heroku.migrate_staging_database(args[:verbose])
       rescue WildlandDevTools::GitSyncException => e

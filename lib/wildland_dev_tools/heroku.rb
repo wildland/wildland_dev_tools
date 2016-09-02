@@ -36,17 +36,36 @@ module WildlandDevTools
         end
       end
 
-      def deploy_master_to_staging(verbose = false)
-        case status_of_master_branch
+      def deploy_master_to_staging(verbose = false, force = false)
+        puts 'Detecting current branch name.' if verbose
+        branch = get_current_branch_name
+        raise GitSyncException, 'Please checkout master branch' unless branch == 'master'
+        deploy_to_staging(branch, verbose, force)
+      end
+
+
+      def deploy_current_branch_to_staging(verbose = false, force = false)
+        puts 'Detecting current branch name.' if verbose
+        branch = get_current_branch_name
+        deploy_to_staging(branch, verbose, force)
+      end
+
+      def deploy_to_staging(branch, verbose = false, force = false)
+        case status_of_current_branch
         when 'Up-to-date'
-          puts 'Deploying to staging.' if verbose
-          system('OVERCOMMIT_DISABLE=1 git push staging master')
+          if force
+            puts "Force deploying #{branch} to staging." if verbose
+            system("OVERCOMMIT_DISABLE=1 git push -f staging #{branch}:master")
+          else
+            puts "Deploying #{branch} to staging." if verbose
+            system("OVERCOMMIT_DISABLE=1 git push staging #{branch}:master")
+          end
         when 'Need to pull'
-          raise GitSyncException, 'Need to pull master from origin.'
+          raise GitSyncException, "Need to pull #{branch} from origin."
         when 'Need to push'
-          raise GitSyncException, 'Need to push master to origin.'
+          raise GitSyncException, "Need to push #{branch} to origin."
         else
-          raise GitSyncException, 'Your local master has diverged from origin.'
+          raise GitSyncException, "Your local #{branch} has diverged from origin."
         end
       end
 
@@ -145,7 +164,7 @@ module WildlandDevTools
         system("heroku run rake db:migrate -r #{remote}")
       end
 
-      def status_of_master_branch
+      def status_of_current_branch
         local = `OVERCOMMIT_DISABLE=1 git rev-parse @`
         remote = `OVERCOMMIT_DISABLE=1 git rev-parse @{u}`
         base = `OVERCOMMIT_DISABLE=1 git merge-base @ @{u}`
@@ -159,6 +178,10 @@ module WildlandDevTools
         else
           'Diverged'
         end
+      end
+
+      def get_current_branch_name
+        `git rev-parse --abbrev-ref HEAD`.strip
       end
 
       def get_app_name(remote, verbose = false)

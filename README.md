@@ -35,6 +35,10 @@ You will get a new batch of new rake tasks under the wildland namespace. For a f
 
 - `rake wildland:heroku:deploy_to_staging` This will deploy `master` to `staging`.
 - `rake wildland:heroku:deploy_to_staging[verbose]` This will deploy `master` to `staging` with verbose details.
+- - `rake wildland:heroku:deploy_to_staging[verbose,force]` This will `--force` deploy `master` to `staging` with verbose details.
+- - `rake wildland:heroku:deploy_current_branch_to_staging` This will promote your current branch to `staging` as `master`.
+- - `rake wildland:heroku:deploy_current_branch_to_staging[verbose]` This will promote your current branch to `staging` as `master` with verbose details.
+- - `rake wildland:heroku:deploy_current_branch_to_staging[verbose,force]` This will `--force` promote your current branch to `staging` as `master` with verbose details.
 - `rake wildland:heroku:promote_to_production` This will promote `staging` to `production`.
 - `rake wildland:heroku:promote_to_production[verbose]` This will promote `staging` to `production` with verbose details.
 - `rake wildland:heroku:maintenance_mode_on` This turns on maintenance mode for `staging` and `production`.
