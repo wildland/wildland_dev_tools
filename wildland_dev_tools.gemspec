@@ -21,7 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rails', '>= 4.1'
   spec.add_runtime_dependency 'rubocop', '>= 0.33'
   spec.add_runtime_dependency 'git', '>= 1.3.0'
-  spec.add_runtime_dependency 'highline', '~> 1.7'
 
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
