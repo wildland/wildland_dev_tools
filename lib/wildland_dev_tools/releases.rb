@@ -1,50 +1,33 @@
-require 'git'
-require 'higline/import'
 require 'json'
 
 module WildlandDevTools
   # :nodoc:
   module Releases
     VALID_REMOTES = %w(production staging)
-    VERSION_FILE_NAME = '.app-version.json'
 
     class << self
       def create_release(verbose = false)
-        current_release_name = determine_new_release_name
+        return false unless git_up_to_date!
+        tag_name = "PRODUCTION-#{base_tag_name}"
+        create_and_push_tag(tag_name, verbose)
       end
 
       def create_release_candidate(verbose = false)
-
+        return false unless git_up_to_date!
+        tag_name = "RC-#{base_tag_name}"
+        create_and_push_tag(tag_name, verbose)
       end
 
       protected
 
-      def create_named_release(release_name, verbose = false)
-        return false unless git_up_to_date!
+      def create_and_push_tag(tag_name, verbose = false)
+        puts "Creating tag #{tag_name}" if verbose
+        system("OVERCOMMIT_DISABLE=1 git tag #{tag_name}")
+        system("OVERCOMMIT_DISABLE=1 git push origin #{tag_name}")
       end
 
-      def determine_new_release_name
-        if File.file?(VERSION_FILE_NAME)
-          create_app_version_release_name
-        else
-          create_date_release_name
-        end
-      end
-
-      def create_app_version_release_name
-        current_version = JSON.parse(File.read(VERSION_FILE_NAME))['version']
-        major, minor, patch = current_version.split('.').map(&:to_int)
-        new_version = HighLine.new.choose do |menu|
-          menu.prompt "Current version: #{current_version}. How should we increment?"
-          menu.choice(:major) { [major + 1, minor, patch].join('.') }
-          menu.choice(:minor) { [major, minor + 1, patch].join('.') }
-          menu.choice(:patch) { [major, minor, patch + 1].join('.') }
-        end
-        # Write back to file
-      end
-
-      def create_date_release_name
-        DateTime.new.strftime("%Y-%m-%d")
+      def base_tag_name
+        DateTime.now.strftime("%y-%m-%d-%H-%M")
       end
 
       def git_up_to_date!
@@ -60,12 +43,6 @@ module WildlandDevTools
           raise GitSyncException, 'Need to push master to origin.'
         else
           raise GitSyncException, 'Your local master has diverged from origin.'
-        end
-      end
-
-      def ensure_valid_remote(remote)
-        unless VALID_REMOTES.include?(remote)
-          raise ArgumentError, "remote argument is required and must be %{VALID_REMOTES}"
         end
       end
     end
