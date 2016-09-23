@@ -17,7 +17,6 @@ namespace :wildland do
     task :promote_to_production, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       begin
         Rake::Task['wildland:heroku:maintenance_mode_on'].execute
-        WildlandDevTools::Heroku.backup_production_database(args[:verbose])
         Rake::Task['wildland:releases:create_release'].execute
         WildlandDevTools::Releases.create_release(args[:verbose])
         WildlandDevTools::Heroku.promote_staging_to_production(args[:verbose])
@@ -34,7 +33,6 @@ namespace :wildland do
     task :deploy_to_staging, [:verbose, :force] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       begin
         WildlandDevTools::Heroku.turn_on_staging_maintenance_mode(args[:verbose])
-        WildlandDevTools::Releases.create_release_candidate(args[:verbose])
         Rake::Task['wildland:releases:create_release_candidate'].execute
         WildlandDevTools::Heroku.deploy_master_to_staging(args[:verbose], args[:force])
         WildlandDevTools::Heroku.copy_production_data_to_staging(args[:verbose])
