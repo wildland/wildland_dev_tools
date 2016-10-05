@@ -13,12 +13,11 @@ namespace :wildland do
       WildlandDevTools::Heroku.backup_production_database(args[:verbose])
     end
 
-    desc 'Promotes staging to production.'
+    desc 'Promotes staging to production. This automatically creates a production release tag.'
     task :promote_to_production, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       begin
         Rake::Task['wildland:heroku:maintenance_mode_on'].execute
-        Rake::Task['wildland:releases:create_release'].execute
-        WildlandDevTools::Releases.create_release(args[:verbose])
+        Rake::Task['wildland:releases:create_release_tag'].execute
         WildlandDevTools::Heroku.promote_staging_to_production(args[:verbose])
         WildlandDevTools::Heroku.migrate_production_database(args[:verbose])
         Rake::Task['wildland:heroku:maintenance_mode_off'].execute
@@ -29,11 +28,11 @@ namespace :wildland do
       end
     end
 
-    desc 'Deploy master to staging.'
+    desc 'Deploy master to staging. This automatically creates a release candidate tag.'
     task :deploy_to_staging, [:verbose, :force] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       begin
         WildlandDevTools::Heroku.turn_on_staging_maintenance_mode(args[:verbose])
-        Rake::Task['wildland:releases:create_release_candidate'].execute
+        Rake::Task['wildland:releases:create_release_candidate_tag'].execute
         WildlandDevTools::Heroku.deploy_master_to_staging(args[:verbose], args[:force])
         WildlandDevTools::Heroku.copy_production_data_to_staging(args[:verbose])
         WildlandDevTools::Heroku.migrate_staging_database(args[:verbose])
@@ -48,7 +47,7 @@ namespace :wildland do
       end
     end
 
-    desc 'Deploy current branch to staging as master.'
+    desc 'Deploy current branch to staging as master. This does not create a release canidate tag.'
     task :deploy_current_branch_to_staging, [:verbose, :force] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       begin
         WildlandDevTools::Heroku.turn_on_staging_maintenance_mode(args[:verbose])
