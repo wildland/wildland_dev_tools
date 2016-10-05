@@ -69,6 +69,11 @@ module WildlandDevTools
         end
       end
 
+      def promote_staging_to_production(verbose = false)
+        puts 'Promoting staging to production' if verbose
+        system('heroku pipelines:promote -r staging')
+      end
+
       def import_production_database(verbose = false)
         puts 'Determining heroku app names.' if verbose
         production_app_name = get_app_name('production', verbose)
@@ -93,11 +98,6 @@ module WildlandDevTools
         remote = 'production'
         puts "Backing up the database for #{remote}" if verbose
         system("heroku pg:backups capture DATABASE -r #{remote}")
-      end
-
-      def promote_staging_to_production(verbose = false)
-        puts 'Promoting staging to production' if verbose
-        system('heroku pipelines:promote -r staging')
       end
 
       def migrate_production_database(verbose = false)

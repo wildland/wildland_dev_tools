@@ -34,14 +34,14 @@ You will get a new batch of new rake tasks under the wildland namespace. For a f
 *Note. These may fail if you did not install heroku-toolbelt through brew.*
 *Note. These tasks require that the production and staging remotes include the word 'staging' and 'production' in them respectively.*
 
-- `rake wildland:heroku:deploy_to_staging` This will deploy `master` to `staging`.
-- `rake wildland:heroku:deploy_to_staging[verbose]` This will deploy `master` to `staging` with verbose details.
-- - `rake wildland:heroku:deploy_to_staging[verbose,force]` This will `--force` deploy `master` to `staging` with verbose details.
-- - `rake wildland:heroku:deploy_current_branch_to_staging` This will promote your current branch to `staging` as `master`.
-- - `rake wildland:heroku:deploy_current_branch_to_staging[verbose]` This will promote your current branch to `staging` as `master` with verbose details.
-- - `rake wildland:heroku:deploy_current_branch_to_staging[verbose,force]` This will `--force` promote your current branch to `staging` as `master` with verbose details.
-- `rake wildland:heroku:promote_to_production` This will promote `staging` to `production`.
-- `rake wildland:heroku:promote_to_production[verbose]` This will promote `staging` to `production` with verbose details.
+- `rake wildland:heroku:deploy_to_staging` This will deploy `master` to `staging`. This will automatically create a release candidate git tag.
+- `rake wildland:heroku:deploy_to_staging[verbose]` This perform the deploy as above, but in verbose mode.
+- - `rake wildland:heroku:deploy_to_staging[verbose,force]` This perform the deploy as above, but this will `--force` deploy `master` to `staging`.
+- - `rake wildland:heroku:deploy_current_branch_to_staging` This will promote your current branch to `staging` as `master`. This will **NOT** automatically create a release candidate git tag.
+- - `rake wildland:heroku:deploy_current_branch_to_staging[verbose]` This perform the deploy as above, but in verbose mode.
+- - `rake wildland:heroku:deploy_current_branch_to_staging[verbose,force]` This perform the deploy as above, but this will `--force` deploy your current branch to `staging`.
+- `rake wildland:heroku:promote_to_production` This will promote `staging` to `production`. This will automatically create a production git tag.
+- `rake wildland:heroku:promote_to_production[verbose]` This perform the deploy as above, but in verbose mode.
 - `rake wildland:heroku:maintenance_mode_on` This turns on maintenance mode for `staging` and `production`.
 - `rake wildland:heroku:maintenance_mode_off` This turns off maintenance mode for `staging` and `production`.
 - `rake wildland:heroku:backup_production_database[verbose]` This will create a backup of the `production` database.
