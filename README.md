@@ -17,6 +17,15 @@ group :development, :test do
 end
 ```
 
+### *[heroku tools](https://github.com/wildland/wildland_dev_tools#heroku-tools) require the following steps*
+
+Install the heroku-toolbelt using brew. You can do this by running `brew install heroku`.
+
+Have your `production` and `staging` git remotes set.
+- `heroku git:remote -a <staging-app> -r staging` where `<staging-app>` is your heroku staging app name.
+- `heroku git:remote -a <production-app> -r production` where `<production-app>` is your heroku production app name.
+
+
 ## Usage
 You will get a new batch of new rake tasks under the wildland namespace. For a full list run `rake -T`.
 
@@ -31,9 +40,6 @@ You will get a new batch of new rake tasks under the wildland namespace. For a f
 - `rake wildland:pre_pull_request` This will run all of the pre pull request tasks to get the project ready for a pull request.
 
 ### Heroku Tools
-*Note. These may fail if you did not install heroku-toolbelt through brew.*
-*Note. These tasks require that the production and staging remotes include the word 'staging' and 'production' in them respectively.*
-
 - `rake wildland:heroku:deploy_to_staging` This will deploy `master` to `staging`. This will automatically create a release candidate git tag.
 - `rake wildland:heroku:deploy_to_staging[verbose]` This perform the deploy as above, but in verbose mode.
 - - `rake wildland:heroku:deploy_to_staging[verbose,force]` This perform the deploy as above, but this will `--force` deploy `master` to `staging`.
