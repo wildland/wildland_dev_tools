@@ -133,7 +133,7 @@ module WildlandDevTools
       def download_database(app_name, filename, verbose = false)
         puts "Downloading #{app_name} database to tmp file #{filename}" if verbose
         system(
-          "curl -o #{filename} `heroku pg:backups public-url --app #{app_name}`"
+          "curl -o #{filename} `heroku pg:backups:public-url --app #{app_name}`"
         )
       end
 
