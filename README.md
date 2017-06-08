@@ -31,6 +31,7 @@ You will get a new batch of new rake tasks under the wildland namespace. For a f
 
 ### Local Development Tools
 *Note that you will need to run `bundle install` before being able to use these.*
+
 *Double Note: if `bundle install` borks on `pg_config` then set the `Pg_config path` with `bundle config build.pg --with-pg-config=/Applications/Postgres.app/Contents/Versions/{YOUR VERSION}/bin/pg_config`
 
 - `rake wildland:setup` This will run all of the setup tasks to get your local enviroment ready to go.
