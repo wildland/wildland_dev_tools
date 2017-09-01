@@ -65,6 +65,16 @@ namespace :wildland do
       end
     end
 
+    desc 'Deploy current branch to staging as master. This does not create a release canidate tag.'
+    task :deploy_current_branch_to_staging_as_rc, [:verbose, :force] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
+      begin
+        Rake::Task['wildland:releases:create_release_candidate_tag'].execute
+        Rake::Task['wildland:heroku:deploy_current_branch_to_staging'].execute
+      rescue WildlandDevTools::GitSyncException => e
+        puts e
+      end
+    end    
+
     desc 'Turns on maintenance mode for both heroku remotes.'
     task :maintenance_mode_on do
       WildlandDevTools::Heroku.turn_on_heroku_maintenance_mode(true)
