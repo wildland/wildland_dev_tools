@@ -6,13 +6,13 @@ These are most useful for projects created by [trailhead](https://github.com/wil
 
 Add the following to your `Gemfile`:
 
-`gem 'wildland_dev_tools', '~>0.8.1', github: 'wildland/wildland_dev_tools'`
+`gem 'wildland_dev_tools', '~>1.0.0'
 
 Typically for wildland projects you will want to put this inside the dev/test block:
 ```
 group :development, :test do
   ...
-  gem 'wildland_dev_tools', '~>0.8.1', github: 'wildland/wildland_dev_tools'`
+  gem 'wildland_dev_tools', '~>1.0.0'
   ...
 end
 ```

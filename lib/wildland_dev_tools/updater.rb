@@ -14,14 +14,29 @@ module WildlandDevTools
         system('rake demo:seed')
       end
 
-      def ruby_version_up_to_date?(needed_ruby_version)
-        ruby_version = `ruby -v`
-        ruby_version.include?(needed_ruby_version.strip)
+      def node_version_up_to_date?(needed_version)
+        current_version = `node -v`
+        current_version.include?(needed_version.strip)
+      end
+
+      def update_node(version)
+        # Try to use the version or install and use
+        system("nvm use #{version}")
+        unless node_version_up_to_date?(version)
+          system("nvm install #{version}")
+          system("nvm use #{version}")
+        end
+      end
+
+      def ruby_version_up_to_date?(needed_version)
+        current_version = `ruby -v`
+        current_version.include?(needed_version.strip)
       end
 
       def update_ruby(version)
         case
         when system('which rvm > /dev/null 2>&1')
+          warn "[DEPRECATION] `rvm` is deprecated.  Please use `rbenv` to manage ruby versions instead."
           update_ruby_with_rvm(version)
         when system('which rbenv > /dev/null 2>&1')
           update_ruby_with_rbenv(version)
@@ -40,18 +55,9 @@ module WildlandDevTools
       end
 
       def update_ruby_with_rbenv(version)
+        system('brew upgrade rbenv ruby-build')
         system("rbenv install #{version}")
-      end
-
-      def ember_cli_rails_installed?
-        File.exist?('bin/heroku_install') && File.exist?('package.json')
-      end
-
-      def old_ember_setup
-        Dir.chdir('app-ember') do
-          system('npm install')
-          system('bower install')
-        end
+        system("rbenv rehash")
       end
 
       def clear_ember_cache
