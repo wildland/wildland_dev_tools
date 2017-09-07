@@ -9,26 +9,24 @@ namespace :wildland do
   task :update_ruby do
     needed_ruby_version = File.read('.ruby-version')
     if WildlandDevTools::Updater.ruby_version_up_to_date?(needed_ruby_version)
-      puts 'up to date.'
+      puts 'Ruby up to date.'
     else
-      puts 'out of date. Updating.'
+      puts 'Ruby out of date. Updating.'
       WildlandDevTools::Updater.update_ruby(needed_ruby_version)
     end
   end
 
   task :update_node do
-    puts 'Node updater needs written'
-  end
-
-  task :update_ember_dependencies do
-    if WildlandDevTools::Updater.ember_cli_rails_installed?
-      puts 'ember-cli-rails installed'
-      system('npm install')
+    needed_node_version = File.read('.nvmrc')
+    if WildlandDevTools::Updater.node_version_up_to_date?(needed_node_version)
+      puts 'Node up to date.'
     else
-      puts 'install ember dependencies'
-      WildlandDevTools::Updater.old_ember_setup
+      puts 'Node out of date. Updating.'
+      WildlandDevTools::Updater.update_node(needed_node_version)
     end
   end
+
+  task update_ember_dependencies: 'ember:install'
 
   desc 'Clears local cache.'
   task :cache_clear do
