@@ -8,6 +8,12 @@ namespace :wildland do
       Rake::Task['db:migrate'].invoke
     end
 
+    desc 'Imports the latest staging database backup to local database.'
+    task :import_latest_staging_database_backup, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
+      WildlandDevTools::Heroku.import_staging_database(args[:verbose])
+      Rake::Task['db:migrate'].invoke
+    end
+
     desc 'Backups production database'
     task :backup_production_database, [:verbose] => [:check_remotes, :check_heroku] do |_t, args| # rubocop:disable Metrics/LineLength
       WildlandDevTools::Heroku.backup_production_database(args[:verbose])
@@ -73,7 +79,7 @@ namespace :wildland do
       rescue WildlandDevTools::GitSyncException => e
         puts e
       end
-    end    
+    end
 
     desc 'Turns on maintenance mode for both heroku remotes.'
     task :maintenance_mode_on do

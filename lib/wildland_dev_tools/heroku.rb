@@ -84,6 +84,16 @@ module WildlandDevTools
         File.delete(scratch_file_name)
       end
 
+      def import_staging_database(verbose = false)
+        puts 'Determining heroku app names.' if verbose
+        staging_app_name = get_app_name('staging', verbose)
+        scratch_file_name = 'latest.dump'
+        database_name = Rails.configuration.database_configuration['development']['database']
+        download_database(staging_app_name, scratch_file_name, verbose)
+        import_database(database_name, scratch_file_name, verbose)
+        File.delete(scratch_file_name)
+      end
+
       def copy_production_data_to_staging(verbose = false)
         puts 'Determining heroku app names.' if verbose
         staging_app_name = get_app_name('staging', verbose)
