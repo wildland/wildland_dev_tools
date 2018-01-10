@@ -19,7 +19,7 @@ end
 
 ### *[heroku tools](https://github.com/wildland/wildland_dev_tools#heroku-tools) require the following steps*
 
-Install the[heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). 
+Install the [heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). 
 For OSx users you can do this using brew by running `brew install heroku`.
 
 Ensure you have your `production` and `staging` git remotes set.
