@@ -19,9 +19,10 @@ end
 
 ### *[heroku tools](https://github.com/wildland/wildland_dev_tools#heroku-tools) require the following steps*
 
-Install the heroku-toolbelt using brew. You can do this by running `brew install heroku`.
+Install the[heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). 
+For OSx users you can do this using brew by running `brew install heroku`.
 
-Have your `production` and `staging` git remotes set.
+Ensure you have your `production` and `staging` git remotes set.
 - `heroku git:remote -a <staging-app> -r staging` where `<staging-app>` is your heroku staging app name.
 - `heroku git:remote -a <production-app> -r production` where `<production-app>` is your heroku production app name.
 
