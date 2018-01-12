@@ -70,33 +70,12 @@ namespace :wildland do
       puts 'Running rubocop...'
       require 'rubocop'
 
-      module RuboCop
-        # :nodoc:
-        class TargetFinder
-          def find(_args)
-            changed_git_files = `git diff --name-only --cached`.split(/\n/)
-
-            rubocop_target_finder = RuboCop::TargetFinder.new(
-              RuboCop::ConfigStore.new
-            )
-            rubocop_config_store = RuboCop::ConfigStore.new
-            rubocop_base_config = rubocop_config_store.for(
-              File.expand_path(__dir__)
-            )
-
-            files_to_check = changed_git_files.select do |file|
-              rubocop_target_finder.to_inspect?(file, [], rubocop_base_config)
-            end
-
-            files_to_check
-          end
-        end
-      end
+      changed_git_files = `git diff --name-only --cached`.split(/\n/)
 
       if args[:autocorrect]
-        exit RuboCop::CLI.new.run(['-aD'])
+        exit RuboCop::CLI.new.run(changed_git_files.concat(['-aD']))
       else
-        exit RuboCop::CLI.new.run(['-D'])
+        exit RuboCop::CLI.new.run(changed_git_files.concat(['-D']))
       end
     end
   end
