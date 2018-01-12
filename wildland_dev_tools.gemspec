@@ -19,10 +19,12 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
   spec.add_dependency 'rails', ['>= 4.1', '< 5']
-  spec.add_runtime_dependency 'rubocop', '>= 0.33'
-  spec.add_runtime_dependency 'git', '>= 1.3.0'
+  spec.add_runtime_dependency 'rubocop', '~> 0.52'
+  spec.add_runtime_dependency 'git', '~> 1.3', '>= 1.3.0'
+  spec.add_runtime_dependency 'table_print', '~> 1.5', '>= 1.5.6'
+  spec.add_runtime_dependency 'brakeman', '~> 4.1'
 
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec"
+  spec.add_development_dependency 'rspec', '~> 0'
 end
