@@ -2,6 +2,8 @@
 This is a gem that contains all of our dev rake tasks.
 These are most useful for projects created by [trailhead](https://github.com/wildland/trailhead) and are deployed on [heroku](https://www.heroku.com/home) using the [pipeline](https://devcenter.heroku.com/articles/pipelines) feature. This allows for separate `staging` and `production` enviroments as well as review apps.
 
+Checkout our [Changelog](CHANGELOG.md) for what has changed.
+
 ## Installation
 
 - Add the following to your `Gemfile`:
