@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "wildland_dev_tools"
   spec.version       = WildlandDevTools::VERSION
   spec.authors       = ["Joe Weakley"]
-  spec.email         = ["joe@wild.labd.com"]
+  spec.email         = ["joe@wild.land.com"]
 
   spec.summary       = 'Wildland Dev Tools'
   spec.description   = 'Wildland Dev Tools'
