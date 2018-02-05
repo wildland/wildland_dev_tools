@@ -10,44 +10,34 @@ module WildlandDevTools
         rollback_production_database(verbose)
       end
 
-      def turn_on_staging_maintenance_mode(verbose = false)
-        remote = 'staging'
-        puts "Turning on maintenance mode for #{remote}" if verbose
-        system("heroku maintenance:on -r #{remote}")
-      end
-
-      def turn_off_staging_maintenance_mode(verbose = false)
-        remote = 'staging'
-        puts "Turning off maintenance mode for #{remote}" if verbose
-        system("heroku maintenance:off -r #{remote}")
-      end
-
       def turn_on_heroku_maintenance_mode(verbose = false)
         %w(staging production).each do |remote|
-          puts "Turning on maintenance mode for #{remote}" if verbose
-          system("heroku maintenance:on -r #{remote}")
+          if remote_available? remote
+            puts "Turning on maintenance mode for #{remote}" if verbose
+            system("heroku maintenance:on -r #{remote}")
+          end
         end
       end
 
       def turn_off_heroku_maintenance_mode(verbose = false)
         %w(staging production).each do |remote|
-          puts "Turning off maintenance mode for #{remote}" if verbose
-          system("heroku maintenance:off -r #{remote}")
+          if remote_available? remote
+            puts "Turning off maintenance mode for #{remote}" if verbose
+            system("heroku maintenance:off -r #{remote}")
+          end
         end
       end
 
       def deploy_master_to_staging(verbose = false, force = false)
         puts 'Detecting current branch name.' if verbose
-        branch = get_current_branch_name
-        raise GitSyncException, 'Please checkout master branch' unless branch == 'master'
-        deploy_to_staging(branch, verbose, force)
+        raise GitSyncException, 'Please checkout master branch' unless on_master_branch?
+        deploy_to_staging(get_current_branch_name, verbose, force)
       end
 
 
       def deploy_current_branch_to_staging(verbose = false, force = false)
         puts 'Detecting current branch name.' if verbose
-        branch = get_current_branch_name
-        deploy_to_staging(branch, verbose, force)
+        deploy_to_staging(get_current_branch_name, verbose, force)
       end
 
       def deploy_to_staging(branch, verbose = false, force = false)
@@ -127,11 +117,15 @@ module WildlandDevTools
       end
 
       def staging_remote_available?
-        Git.open('.').remotes.map(&:to_s).include?('staging')
+        remote_available? 'staging'
       end
 
       def production_remote_available?
-        Git.open('.').remotes.map(&:to_s).include?('production')
+        remote_available? 'production'
+      end
+
+      def remote_available?(remote_name)
+        Git.open('.').remotes.map(&:to_s).include?(remote_name)
       end
 
       def heroku_toolbelt_available?
@@ -160,12 +154,10 @@ module WildlandDevTools
         system("heroku rollback #{remote}")
       end
 
-      def rollback_database(remote, verbose = false)
+      def rollback_database(remote)
         ensure_valid_remote(remote)
-        if verbose
-          puts "Manually restore database for #{remote}"
-          puts 'Then run \"rake wildland:heroku:maintenance_mode_off\"'
-        end
+        puts "Manually restore database for #{remote}"
+        puts 'Then run \"rake wildland:heroku:maintenance_mode_off\"'
       end
 
       def migrate_database(remote, verbose = false)
@@ -191,7 +183,15 @@ module WildlandDevTools
       end
 
       def get_current_branch_name
-        `git rev-parse --abbrev-ref HEAD`.strip
+        `git rev-parse --abbrev-ref HEAD`.strip # TODO swap to ruby-git
+      end
+
+      def on_master_branch?
+        on_branch? 'master'
+      end
+
+      def on_branch?(branch_name)
+        get_current_branch_name == branch_name
       end
 
       def get_app_name(remote, verbose = false)
