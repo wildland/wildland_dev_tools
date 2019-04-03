@@ -6,9 +6,9 @@ module MyPlugin
     railtie_name :wildland_dev_tools
 
     rake_tasks do
-      load 'tasks/heroku.rake'
-      load 'tasks/reports.rake'
-      load 'tasks/setup.rake'
+      load 'tasks/wildland/setup.rake'
+      load 'tasks/deployment.rake'
+      load 'tasks/frontend.rake'
       load 'tasks/releases.rake'
     end
   end
